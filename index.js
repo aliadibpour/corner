@@ -7,10 +7,12 @@ const app = express();
 const server = http.createServer(app);
 
 app.get("/", (req, res) => {
-  res.send("hello server")
+  res.send("hello server in production")
 })
 const io = new Server(server ,{
-  cors: "*"
+  cors: {
+    origin: "*"
+  }
 })
 io.on('connection', async (socket) => {
 
