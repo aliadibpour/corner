@@ -20,7 +20,8 @@ io.on('connection', async (socket) => {
     
   const browser = await puppeteer.launch({
     headless: true,
-    defaultViewport: null
+    defaultViewport: null,
+    executablePath: "/path/to/Chrome"
   });
   const page = await browser.newPage();
   await page.setViewport({width: 1080, height: 1024});
@@ -93,6 +94,6 @@ const getMatchList = async (page) => {
   })
 }
 
-server.listen(10000, ()=> {
+server.listen(3000, ()=> {
   console.log('Server is running on http://localhost:3000');
 });
