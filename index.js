@@ -11,55 +11,51 @@ app.get("/", (req, res) => {
   res.send("hello server in production")
 })
 const io = new Server(server ,{
-  cors: {
-    origin: "*"
-  }
+  cors: "*"
 })
 io.on('connection', async (socket) => {
-
-  const url = `https://football360.ir/results`;
+  try {
+    const url = `https://football360.ir/results`;
     
-  const browser = await puppeteer.launch({
-    args: [
-      "--disable-setuid-sandbox",
-      "--no-sandbox",
-      "--single-process",
-      "--no-zygote",
-    ],
-    executablePath:
-      process.env.NODE_ENV === "production"
-        ? process.env.PUPPETEER_EXECUTABLE_PATH
-        : puppeteer.executablePath(),headless: true,
-  });
-  const page = await browser.newPage();
-  await page.setViewport({width: 1080, height: 1024});
-  page.setDefaultNavigationTimeout( 90000 );
-  await page.goto(url);
-  await page.waitForSelector('.Sections_container__03lu8')
-
-  console.log('A user connected');
-  socket.emit("load", "load complete")
+    const browser = await puppeteer.launch({
+      executablePath:
+        process.env.NODE_ENV === "production"
+          ? "/usr/bin/google-chrome-stable"
+          : puppeteer.executablePath(),
+    });
+    const page = await browser.newPage();
+    await page.setViewport({width: 1080, height: 1024});
+    page.setDefaultNavigationTimeout( 90000 );
+    await page.goto(url);
+    await page.waitForSelector('.Sections_container__03lu8')
   
-  const matchList = await getMatchList(page)
-  socket.emit("message", matchList)
-
-  socket.on("click", async function(data, callback) {
-    const date = new Date();
-    const today = date.toISOString().split('T')[0];
-
-    if (data === today) {
-      await page.click(`div > a[href="/results"]`);
-    } else {
-      await page.click(`a[href="/results?day=${data}"]`);
-      //await page.goto(`${url}?day=${data}`)
-    }
-  })
-
-  socket.on("message",async function(data, callback) {
-    console.log(`Received message from client: ${data}`);
+    console.log('A user connected');
+    socket.emit("load", "load complete")
+    
     const matchList = await getMatchList(page)
-    callback(matchList)
-  })
+    socket.emit("message", matchList)
+  
+    socket.on("click", async function(data, callback) {
+      const date = new Date();
+      const today = date.toISOString().split('T')[0];
+  
+      if (data === today) {
+        await page.click(`div > a[href="/results"]`);
+      } else {
+        await page.click(`a[href="/results?day=${data}"]`);
+        //await page.goto(`${url}?day=${data}`)
+      }
+    })
+  
+    socket.on("message",async function(data, callback) {
+      console.log(`Received message from client: ${data}`);
+      const matchList = await getMatchList(page)
+      callback(matchList)
+    })
+  } catch (error) {
+    socket.emit("message", false)
+  }
+  
 });
 
 const getMatchList = async (page) => {
