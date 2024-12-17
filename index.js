@@ -17,7 +17,7 @@ io.on('connection', async (socket) => {
   const browser = await puppeteer.launch({
     executablePath:
       process.env.NODE_ENV === "production"
-        ? PUPPETEER_EXECUTABLE_PATH
+        ? process.env.PUPPETEER_EXECUTABLE_PATH
         : puppeteer.executablePath(),
   });
   try {
