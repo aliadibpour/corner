@@ -2,6 +2,7 @@ const http = require('http');
 const express = require('express');
 const { Server } = require("socket.io");
 const { default: puppeteer } = require('puppeteer');
+require("dotenv").config()
 
 const app = express();
 const server = http.createServer(app);
@@ -20,7 +21,15 @@ io.on('connection', async (socket) => {
     
   const browser = await puppeteer.launch({
     headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox','--proxy-server=http://your-proxy.com']
+    executablePath: process.env.NODE_ENV === "production" ?
+    process.env.PUPPETEER_EXECUTABLE_PATH :
+    puppeteer.executablePath(),
+    args: [
+      "--disable-setuid-sandbox",
+      "--no-sandbox",
+      "--single-process",
+      "--no-zygote"
+    ]
   });
   const page = await browser.newPage();
   await page.setViewport({width: 1080, height: 1024});
