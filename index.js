@@ -93,6 +93,6 @@ const getMatchList = async (page) => {
   })
 }
 
-server.listen(3000, () => {
+server.listen(10000, ()=> {
   console.log('Server is running on http://localhost:3000');
 });
