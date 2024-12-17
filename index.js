@@ -14,15 +14,15 @@ const io = new Server(server ,{
   cors: "*"
 })
 io.on('connection', async (socket) => {
+  const browser = await puppeteer.launch({
+    executablePath:
+      process.env.NODE_ENV === "production"
+        ? PUPPETEER_EXECUTABLE_PATH
+        : puppeteer.executablePath(),
+  });
   try {
     const url = `https://football360.ir/results`;
     
-    const browser = await puppeteer.launch({
-      executablePath:
-        process.env.NODE_ENV === "production"
-          ? "/usr/bin/google-chrome-stable"
-          : puppeteer.executablePath(),
-    });
     const page = await browser.newPage();
     await page.setViewport({width: 1080, height: 1024});
     page.setDefaultNavigationTimeout( 90000 );
@@ -52,10 +52,13 @@ io.on('connection', async (socket) => {
       const matchList = await getMatchList(page)
       callback(matchList)
     })
+
+    socket.on("disconnect", async () => {
+      await browser.close()
+    })
   } catch (error) {
     socket.emit("message", false)
   }
-  
 });
 
 const getMatchList = async (page) => {
