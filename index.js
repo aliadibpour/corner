@@ -20,8 +20,7 @@ io.on('connection', async (socket) => {
     
   const browser = await puppeteer.launch({
     headless: true,
-    defaultViewport: null,
-    executablePath: "/path/to/Chrome"
+    args: ['--no-sandbox', '--disable-setuid-sandbox','--proxy-server=http://your-proxy.com']
   });
   const page = await browser.newPage();
   await page.setViewport({width: 1080, height: 1024});
