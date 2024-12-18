@@ -15,20 +15,20 @@ const io = new Server(server ,{
   cors: "*"
 })
 io.on('connection', async (socket) => {
-  // const browser = await puppeteer.launch({
-  //   executablePath:
-  //     process.env.NODE_ENV === "production"
-  //       ? process.env.PUPPETEER_EXECUTABLE_PATH
-  //       : puppeteer.executablePath(),
-  // });
-
-  const browser = await Chromium.puppeteer.launch({
-    //args: Chromium.args,
-    defaultViewport: Chromium.defaultViewport,
-    executablePath: await Chromium.executablePath, 
-    headless: true,
-    ignoreHTTPSErrors: true,
+  const browser = await puppeteer.launch({
+    executablePath:
+    //  process.env.NODE_ENV === "production"
+         process.env.PUPPETEER_EXECUTABLE_PATH
+        //: puppeteer.executablePath(),
   });
+
+  // const browser = await Chromium.puppeteer.launch({
+  //   //args: Chromium.args,
+  //   defaultViewport: Chromium.defaultViewport,
+  //   executablePath: await Chromium.executablePath, 
+  //   headless: true,
+  //   ignoreHTTPSErrors: true,
+  // });
   try {
     const url = `https://football360.ir/results`;
     
