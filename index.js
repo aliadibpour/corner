@@ -3,6 +3,7 @@ const express = require('express');
 const { Server } = require("socket.io");
 const { default: puppeteer } = require('puppeteer');
 require("dotenv").config()
+const Chromium = require('chrome-aws-lambda');
 
 const app = express();
 const server = http.createServer(app);
@@ -14,17 +15,19 @@ const io = new Server(server ,{
   cors: "*"
 })
 io.on('connection', async (socket) => {
-  const browser = await puppeteer.launch({
-    args: [
-      "--disable-setuid-sandbox",
-      "--no-sandbox",
-      "--single-process",
-      "--no-zygote",
-    ],
-    executablePath:
-      process.env.NODE_ENV === "production"
-        ? process.env.PUPPETEER_EXECUTABLE_PATH
-        : puppeteer.executablePath(),
+  // const browser = await puppeteer.launch({
+  //   executablePath:
+  //     process.env.NODE_ENV === "production"
+  //       ? process.env.PUPPETEER_EXECUTABLE_PATH
+  //       : puppeteer.executablePath(),
+  // });
+
+  const browser = await Chromium.puppeteer.launch({
+    //args: Chromium.args,
+    defaultViewport: Chromium.defaultViewport,
+    executablePath: await Chromium.executablePath, 
+    headless: true,
+    ignoreHTTPSErrors: true,
   });
   try {
     const url = `https://football360.ir/results`;
@@ -45,18 +48,26 @@ io.on('connection', async (socket) => {
       const date = new Date();
       const today = date.toISOString().split('T')[0];
   
-      if (data === today) {
-        await page.click(`div > a[href="/results"]`);
-      } else {
-        await page.click(`a[href="/results?day=${data}"]`);
-        //await page.goto(`${url}?day=${data}`)
+      try {
+        if (data === today) {
+          await page.click(`div > a[href="/results"]`);
+        } else {
+          await page.click(`a[href="/results?day=${data}"]`);
+          //await page.goto(`${url}?day=${data}`)
+        }
+      } catch (error) {
+        callback(false)
       }
     })
   
     socket.on("message",async function(data, callback) {
       console.log(`Received message from client: ${data}`);
-      const matchList = await getMatchList(page)
-      callback(matchList)
+      try {
+        const matchList = await getMatchList(page)
+        callback(matchList)
+      } catch (error) {
+        callback(false)
+      }
     })
 
     socket.on("disconnect", async () => {
