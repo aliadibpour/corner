@@ -14,11 +14,12 @@ app.get("/", (req, res) => {
 const io = new Server(server ,{
   cors: "*"
 })
-io.on('connection', async (socket) => {
+io.on('connection', async (socket) => {  
   const browser = await puppeteer.launch({
-    headless: true
-  });
-
+    headless: true,
+    executablePath: '/opt/render/project/src/.apt/usr/bin/chromium', // Adjust this path if necessary
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
+  });  
 
   try {
     const url = `https://football360.ir/results`;
