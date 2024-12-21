@@ -10,9 +10,8 @@ const scrapeLogic = async (res) => {
       "--no-zygote",
     ],
     executablePath:
-      process.env.NODE_ENV === "production"
-        ? process.env.PUPPETEER_EXECUTABLE_PATH
-        : puppeteer.executablePath(),
+         process.env.PUPPETEER_EXECUTABLE_PATH
+        || puppeteer.executablePath(),
   });
   try {
     const page = await browser.newPage();
