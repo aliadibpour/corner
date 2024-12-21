@@ -14,25 +14,25 @@ const io = new Server(server ,{
   cors: "*"
 })
 io.on('connection', async (socket) => {  
-  const browser = await puppeteer.launch({
-    headless: true,
-    //executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/google-chrome-stable',
-    executablePath: '/opt/render/dist/chromium/',
-    //args: ['--no-sandbox', '--disable-setuid-sandbox']
-    // executablePath: "C:\Users\Ali\.cache\puppeteer\chrome\win64-129.0.6668.89\chrome-win64/chrome"
-  }); 
-
   // const browser = await puppeteer.launch({
-  //   // args: [
-  //   //   "--disable-setuid-sandbox",
-  //   //   "--no-sandbox",
-  //   //   "--single-process",
-  //   //   "--no-zygote",
-  //   // ],
-  //   executablePath:
-  //       process.env.PUPPETEER_EXECUTABLE_PATH
-  //       || puppeteer.executablePath(),
-  // });
+  //   headless: true,
+  //   //executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/google-chrome-stable',
+  //   executablePath: '/opt/render/dist/chromium/',
+  //   //args: ['--no-sandbox', '--disable-setuid-sandbox']
+  //   // executablePath: "C:\Users\Ali\.cache\puppeteer\chrome\win64-129.0.6668.89\chrome-win64/chrome"
+  // }); 
+
+  const browser = await puppeteer.launch({
+    // args: [
+    //   "--disable-setuid-sandbox",
+    //   "--no-sandbox",
+    //   "--single-process",
+    //   "--no-zygote",
+    // ],
+    executablePath:
+        process.env.PUPPETEER_EXECUTABLE_PATH
+        || puppeteer.executablePath(),
+  });
   try {
     const url = `https://football360.ir/results`;
     
