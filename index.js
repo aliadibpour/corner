@@ -16,7 +16,9 @@ app.get("/scrape", (req, res) => {
   scrapeLogic(res);
 });
 
-app.get("/aa", a)
+app.get("/aa", (req, res) => {
+  a(res)
+})
 
 const io = new Server(server ,{
   cors: "*"
