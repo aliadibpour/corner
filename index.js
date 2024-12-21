@@ -3,7 +3,8 @@ const express = require('express');
 const { Server } = require("socket.io");
 const { default: puppeteer } = require('puppeteer');
 require("dotenv").config()
-const {scrapeLogic} = require("./scrape")
+const {scrapeLogic} = require("./scrape");
+const { a } = require('./a');
 
 const app = express();
 const server = http.createServer(app);
@@ -14,6 +15,8 @@ app.get("/", (req, res) => {
 app.get("/scrape", (req, res) => {
   scrapeLogic(res);
 });
+
+app.get("/aa", a)
 
 const io = new Server(server ,{
   cors: "*"
