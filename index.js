@@ -6,7 +6,7 @@ require("dotenv").config()
 
 const app = express();
 const server = http.createServer(app);
-
+console.log("adib")
 app.get("/", (req, res) => {
   res.send("hello server in production")
 })
@@ -14,6 +14,7 @@ const io = new Server(server ,{
   cors: "*"
 })
 io.on('connection', async (socket) => {  
+  io.emit("a", "ali adib")
   // const browser = await puppeteer.launch({
   //   headless: true,
   //   //executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/google-chrome-stable',
