@@ -1,9 +1,8 @@
 const http = require('http');
 const express = require('express');
 const { Server } = require("socket.io");
-const { default: puppeteer } = require('puppeteer');
+const { default: puppeteer } = require('puppeteer-core');
 require("dotenv").config()
-const Chromium = require('chrome-aws-lambda');
 
 const app = express();
 const server = http.createServer(app);
@@ -17,7 +16,8 @@ const io = new Server(server ,{
 io.on('connection', async (socket) => {  
   const browser = await puppeteer.launch({
     headless: true,
-    executablePath: '/opt/render/project/src/.apt/usr/bin/chromium', // Adjust this path if necessary
+    //executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/google-chrome-stable',
+    executablePath: '/opt/render/dist/chromium/',
     args: ['--no-sandbox', '--disable-setuid-sandbox']
   });  
 
