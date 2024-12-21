@@ -3,13 +3,18 @@ const express = require('express');
 const { Server } = require("socket.io");
 const { default: puppeteer } = require('puppeteer');
 require("dotenv").config()
+const {scrapeLogic} = require("./scrape")
 
 const app = express();
 const server = http.createServer(app);
-console.log("adib")
 app.get("/", (req, res) => {
   res.send("hello server in production")
 })
+
+app.get("/scrape", (req, res) => {
+  scrapeLogic(res);
+});
+
 const io = new Server(server ,{
   cors: "*"
 })
