@@ -14,8 +14,7 @@
     "express": "^4.21.1",
     "ffmpeg": "^0.0.4",
     "nodemon": "^3.1.7",
-    "puppeteer": "^23.5.0",
-    "puppeteer-core": "^23.11.1",
+    "puppeteer": "^19.11.1",
     "socket.io": "^4.8.1"
   },
   "devDependencies": {
