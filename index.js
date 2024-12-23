@@ -1,7 +1,7 @@
 const http = require('http');
 const express = require('express');
 const { Server } = require("socket.io");
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-core');
 require("dotenv").config()
 const {scrapeLogic} = require("./scrape");
 const { a } = require('./a');
@@ -23,35 +23,34 @@ app.get("/aa", (req, res) => {
 const io = new Server(server ,{
   cors: "*"
 })
+let browser;
 io.on('connection', async (socket) => {  
   io.emit("a", "ali adib")
-  // const browser = await puppeteer.launch({
-  //   // args: [
-  //   //   "--disable-setuid-sandbox",
-  //   //   "--no-sandbox",
-  //   //   "--single-process",
-  //   //   "--no-zygote",
-  //   // ],
-  //   executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-  //   headless: true
-  // });
-  // const browser = await puppeteer.launch({
-  //   args: chromium.args,
-  //   executablePath: await chromium.executablePath,
-  //   headless: chromium.headless,
-  // });
-  const browser = await puppeteer.launch({
-    args: [
-      "--disable-setuid-sandbox",
-      "--no-sandbox",
-      "--single-process",
-      "--no-zygote",
-    ],
-    executablePath:
-      process.env.NODE_ENV === "production"
-        ? process.env.PUPPETEER_EXECUTABLE_PATH
-        : puppeteer.executablePath(),
+  if(!browser)
+    browser = await puppeteer.launch({
+      // args: [
+      //   "--disable-setuid-sandbox",
+      //   "--no-sandbox",
+      //   "--single-process",
+      //   "--no-zygote",
+      // ],
+      executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+      headless: false
   });
+
+
+  // const browser = await puppeteer.launch({
+  //   args: [
+  //     "--disable-setuid-sandbox",
+  //     "--no-sandbox",
+  //     "--single-process",
+  //     "--no-zygote",
+  //   ],
+  //   executablePath:
+  //     process.env.NODE_ENV === "production"
+  //       ? process.env.PUPPETEER_EXECUTABLE_PATH
+  //       : puppeteer.executablePath(),
+  // });
   try {
     const url = `https://football360.ir/results`;
     
@@ -94,7 +93,8 @@ io.on('connection', async (socket) => {
     })
 
     socket.on("disconnect", async () => {
-      await browser.close()
+      //await browser.close()
+      console.log("user disconnect")
     })
   } catch (error) {
     socket.emit("message", false)
