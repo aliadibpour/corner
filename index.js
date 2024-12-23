@@ -25,21 +25,33 @@ const io = new Server(server ,{
 })
 io.on('connection', async (socket) => {  
   io.emit("a", "ali adib")
-  const browser = await puppeteer.launch({
-    // args: [
-    //   "--disable-setuid-sandbox",
-    //   "--no-sandbox",
-    //   "--single-process",
-    //   "--no-zygote",
-    // ],
-    executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-    headless: true
-  });
+  // const browser = await puppeteer.launch({
+  //   // args: [
+  //   //   "--disable-setuid-sandbox",
+  //   //   "--no-sandbox",
+  //   //   "--single-process",
+  //   //   "--no-zygote",
+  //   // ],
+  //   executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+  //   headless: true
+  // });
   // const browser = await puppeteer.launch({
   //   args: chromium.args,
   //   executablePath: await chromium.executablePath,
   //   headless: chromium.headless,
   // });
+  const browser = await puppeteer.launch({
+    args: [
+      "--disable-setuid-sandbox",
+      "--no-sandbox",
+      "--single-process",
+      "--no-zygote",
+    ],
+    executablePath:
+      process.env.NODE_ENV === "production"
+        ? process.env.PUPPETEER_EXECUTABLE_PATH
+        : puppeteer.executablePath(),
+  });
   try {
     const url = `https://football360.ir/results`;
     
