@@ -1,7 +1,7 @@
 const http = require('http');
 const express = require('express');
 const { Server } = require("socket.io");
-const { default: puppeteer } = require('puppeteer');
+const puppeteer = require('puppeteer-core');
 require("dotenv").config()
 const {scrapeLogic} = require("./scrape");
 const { a } = require('./a');
@@ -25,14 +25,6 @@ const io = new Server(server ,{
 })
 io.on('connection', async (socket) => {  
   io.emit("a", "ali adib")
-  // const browser = await puppeteer.launch({
-  //   headless: true,
-  //   //executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/google-chrome-stable',
-  //   executablePath: '/opt/render/dist/chromium/',
-  //   //args: ['--no-sandbox', '--disable-setuid-sandbox']
-  //   // executablePath: "C:\Users\Ali\.cache\puppeteer\chrome\win64-129.0.6668.89\chrome-win64/chrome"
-  // }); 
-
   const browser = await puppeteer.launch({
     // args: [
     //   "--disable-setuid-sandbox",
@@ -40,10 +32,14 @@ io.on('connection', async (socket) => {
     //   "--single-process",
     //   "--no-zygote",
     // ],
-    executablePath:
-        process.env.PUPPETEER_EXECUTABLE_PATH
-        || puppeteer.executablePath(),
+    executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    headless: true
   });
+  // const browser = await puppeteer.launch({
+  //   args: chromium.args,
+  //   executablePath: await chromium.executablePath,
+  //   headless: chromium.headless,
+  // });
   try {
     const url = `https://football360.ir/results`;
     
@@ -121,8 +117,8 @@ const getMatchList = async (page) => {
                     awayTeam: awayTeam.innerHTML,
                     homeTeamImage,
                     awayTeamImage,
-                    matchFinish: matchFinish ? matchFinish.innerHTML : false,
-                    matchMinutes: matchMinutes ? matchMinutes.innerHTML : false,
+                    matchFinish: matchFinish?.innerHTML || false,
+                    matchMinutes: matchMinutes?.innerHTML || false,
                     matchAdjournment: matchAdjournment?.innerHTML || false,
                     matchCancel: matchCancel?.innerHTML || false,
                     matchMinutesAfter90: matchMinutesAfter90?.innerHTML || false

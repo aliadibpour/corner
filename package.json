@@ -14,11 +14,12 @@
     "express": "^4.21.1",
     "ffmpeg": "^0.0.4",
     "nodemon": "^3.1.7",
-    "puppeteer": "^19.11.1",
+    "puppeteer-core": "^6.0.0",
     "socket.io": "^4.8.1"
   },
   "devDependencies": {
     "@types/node": "^22.10.1",
+    "@types/puppeteer-core": "^5.4.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2"
   },
