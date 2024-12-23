@@ -26,31 +26,33 @@ const io = new Server(server ,{
 let browser;
 io.on('connection', async (socket) => {  
   io.emit("a", "ali adib")
-  if(!browser)
-    browser = await puppeteer.launch({
-      // args: [
-      //   "--disable-setuid-sandbox",
-      //   "--no-sandbox",
-      //   "--single-process",
-      //   "--no-zygote",
-      // ],
-      executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-      headless: false
-  });
-
-
-  // const browser = await puppeteer.launch({
-  //   args: [
-  //     "--disable-setuid-sandbox",
-  //     "--no-sandbox",
-  //     "--single-process",
-  //     "--no-zygote",
-  //   ],
-  //   executablePath:
-  //     process.env.NODE_ENV === "production"
-  //       ? process.env.PUPPETEER_EXECUTABLE_PATH
-  //       : puppeteer.executablePath(),
+  // if(!browser)
+  //   browser = await puppeteer.launch({
+  //     // args: [
+  //     //   "--disable-setuid-sandbox",
+  //     //   "--no-sandbox",
+  //     //   "--single-process",
+  //     //   "--no-zygote",
+  //     // ],
+  //     executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+  //     headless: false
   // });
+
+
+  if (!browser) {
+    browser = await puppeteer.launch({
+      args: [
+        "--disable-setuid-sandbox",
+        "--no-sandbox",
+        "--single-process",
+        "--no-zygote",
+      ],
+      executablePath:
+        process.env.NODE_ENV === "production"
+          ? process.env.PUPPETEER_EXECUTABLE_PATH
+          : puppeteer.executablePath(),
+    });
+  }
   try {
     const url = `https://football360.ir/results`;
     
