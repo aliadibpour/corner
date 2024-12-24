@@ -1,7 +1,7 @@
 const http = require('http');
 const express = require('express');
 const { Server } = require("socket.io");
-const puppeteer = require('puppeteer-core');
+const puppeteer = require('puppeteer');
 require("dotenv").config()
 const {scrapeLogic} = require("./scrape");
 const { a } = require('./a');
